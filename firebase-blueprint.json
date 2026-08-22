@@ -1,0 +1,98 @@
+{
+  "collections": [
+    {
+      "name": "site_items",
+      "description": "Stores projects, services, team members, testimonials, and blog posts",
+      "fields": [
+        { "name": "type", "type": "string" },
+        { "name": "sortOrder", "type": "number" },
+        { "name": "title", "type": "string" },
+        { "name": "subtitle", "type": "string" },
+        { "name": "body", "type": "string" },
+        { "name": "meta", "type": "string" },
+        { "name": "imageKey", "type": "string" },
+        { "name": "slug", "type": "string" },
+        { "name": "seoTitle", "type": "string" },
+        { "name": "seoDescription", "type": "string" },
+        { "name": "publishedAt", "type": "string" },
+        { "name": "deliverables", "type": "string" },
+        { "name": "process", "type": "string" },
+        { "name": "sectors", "type": "string" },
+        { "name": "price", "type": "string" },
+        { "name": "status", "type": "string" }
+      ],
+      "rules": {
+        "read": "true",
+        "create": "isAdmin()",
+        "update": "isAdmin()",
+        "delete": "isAdmin()"
+      }
+    },
+    {
+      "name": "site_settings",
+      "description": "Stores global website settings (key-value pairs stored as documents where document ID is the key)",
+      "fields": [
+        { "name": "value", "type": "string" }
+      ],
+      "rules": {
+        "read": "true",
+        "create": "isAdmin()",
+        "update": "isAdmin()",
+        "delete": "isAdmin()"
+      }
+    },
+    {
+      "name": "contact_submissions",
+      "description": "Stores user inquiries from the contact form",
+      "fields": [
+        { "name": "name", "type": "string" },
+        { "name": "email", "type": "string" },
+        { "name": "phone", "type": "string" },
+        { "name": "company", "type": "string" },
+        { "name": "service", "type": "string" },
+        { "name": "budget", "type": "string" },
+        { "name": "message", "type": "string" },
+        { "name": "status", "type": "string" },
+        { "name": "createdAt", "type": "string" }
+      ],
+      "rules": {
+        "read": "isAdmin()",
+        "create": "true",
+        "update": "isAdmin()",
+        "delete": "isAdmin()"
+      }
+    },
+    {
+      "name": "admin_users",
+      "description": "Stores authorized admin users and their roles",
+      "fields": [
+        { "name": "email", "type": "string" },
+        { "name": "name", "type": "string" },
+        { "name": "role", "type": "string" },
+        { "name": "createdAt", "type": "string" }
+      ],
+      "rules": {
+        "read": "isAdmin()",
+        "create": "isOwner()",
+        "update": "isOwner()",
+        "delete": "isOwner()"
+      }
+    },
+    {
+      "name": "page_views",
+      "description": "Stores raw page view analytics",
+      "fields": [
+        { "name": "path", "type": "string" },
+        { "name": "referrer", "type": "string" },
+        { "name": "visitorId", "type": "string" },
+        { "name": "createdAt", "type": "string" }
+      ],
+      "rules": {
+        "read": "isAdmin()",
+        "create": "true",
+        "update": "false",
+        "delete": "isAdmin()"
+      }
+    }
+  ]
+}
