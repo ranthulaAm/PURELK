@@ -2,5 +2,7 @@
   "name": "PURE.LK Creative Agency",
   "description": "A new-generation Sri Lankan creative agency building ideas, stories, and brand experiences that move people.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
