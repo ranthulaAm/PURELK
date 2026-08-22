@@ -18,7 +18,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
         aria-label="PURE.LK home"
         href="/"
       >
-        <img src="/PUREhead.png" alt="PURE.LK" />
+        <img src="/purelk-wordmark.png" alt="PURE.LK" />
       </a>
       <div className="nav-links">
         <a
