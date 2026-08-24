@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSite } from '../context/SiteContext';
 
 interface NavigationProps {
   onNavigate: (path: string) => void;
@@ -6,6 +7,8 @@ interface NavigationProps {
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
+  const { settings } = useSite();
+
   return (
     <nav className="nav shell" id="site-nav">
       <a
@@ -20,6 +23,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
       >
         <img src="/purelk-wordmark.png" alt="PURE.LK" />
       </a>
+
       <div className="nav-links">
         <a
           href="/#work"
@@ -31,7 +35,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
             }, 100);
           }}
         >
-          Work
+          {settings.navLabel1 || 'Work'}
         </a>
         <a
           href="/what-we-do"
@@ -41,7 +45,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         >
-          What We Do
+          {settings.navLabel2 || 'What We Do'}
         </a>
         <a
           href="/#about"
@@ -53,7 +57,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
             }, 100);
           }}
         >
-          About
+          {settings.navLabel3 || 'About'}
         </a>
         <a
           href="/blog"
@@ -63,9 +67,10 @@ export const Navigation: React.FC<NavigationProps> = ({ onNavigate }) => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         >
-          Insights
+          {settings.navLabel4 || 'Insights'}
         </a>
       </div>
+
       <a
         className="nav-cta cursor-pointer"
         href="/#contact"

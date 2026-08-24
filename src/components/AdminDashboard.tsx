@@ -8,6 +8,7 @@ interface AdminDashboardProps {
 
 const tabs = [
   'general',
+  'navigation',
   'project',
   'service',
   'team',
@@ -25,6 +26,7 @@ type TabKey = (typeof tabs)[number];
 
 const labels: Record<string, string> = {
   general: 'Website',
+  navigation: 'Navigation',
   project: 'Portfolio',
   service: 'Services',
   team: 'Team',
@@ -39,6 +41,13 @@ const labels: Record<string, string> = {
 };
 
 const itemTypes = ['project', 'service', 'team', 'testimonial', 'blog'];
+
+const navigationFields = [
+  ['navLabel1', 'Link 1 (Portfolio section)', 'Work'],
+  ['navLabel2', 'Link 2 (Services page)', 'What We Do'],
+  ['navLabel3', 'Link 3 (About section)', 'About'],
+  ['navLabel4', 'Link 4 (Blog page)', 'Insights'],
+];
 
 const generalFields = [
   ['eyebrow', 'Eyebrow badge', 'Independent creative agency · Sri Lanka'],
@@ -306,6 +315,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
         </div>
 
         {active === 'general' && settingForm(generalFields)}
+        {active === 'navigation' && settingForm(navigationFields)}
         {active === 'contact' && settingForm(contactFields)}
         {active === 'seo' && settingForm(seoFields)}
         {active === 'social' && settingForm(socialFields)}
@@ -400,7 +410,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                 />
               </label>
 
-              {active === 'service' && (
+              {(active === 'service' || active === 'project') && (
                 <>
                   <label>
                     What we deliver (one per line)
@@ -486,8 +496,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                 Display order
                 <input
                   type="number"
-                  value={draft.sortOrder || 1}
-                  onChange={(e) => setDraft({ ...draft, sortOrder: Number(e.target.value) })}
+                  value={draft.sortOrder ?? ''}
+                  onChange={(e) => setDraft({ ...draft, sortOrder: e.target.value ? Number(e.target.value) : 0 })}
                 />
               </label>
 

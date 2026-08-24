@@ -50,7 +50,11 @@ export interface SiteSettings {
   linkedin: string;
   tiktok: string;
   youtube: string;
-  [key: string]: string;
+  navLabel1?: string;
+  navLabel2?: string;
+  navLabel3?: string;
+  navLabel4?: string;
+  [key: string]: string | undefined;
 }
 
 export interface ContactSubmission {

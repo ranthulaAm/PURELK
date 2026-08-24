@@ -120,7 +120,8 @@ export const SiteProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const unsubItems = onSnapshot(collection(db, 'site_items'), (snapshot) => {
       const newItems: SiteItem[] = [];
       snapshot.forEach((d) => newItems.push(d.data() as SiteItem));
-      if (newItems.length > 0) setItems(newItems);
+      newItems.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+      setItems(newItems);
     });
 
     const unsubSettings = onSnapshot(collection(db, 'site_settings'), (snapshot) => {
