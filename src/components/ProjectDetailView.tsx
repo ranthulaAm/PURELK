@@ -63,7 +63,7 @@ export const ProjectDetailView: React.FC<ProjectDetailViewProps> = ({ slug, onNa
 
       {project.imageKey && (
         <div className="detail-image shell">
-          <img src={project.imageKey} alt={project.title} />
+          <img src={project.imageKey} alt={project.title} referrerPolicy="no-referrer" />
         </div>
       )}
 

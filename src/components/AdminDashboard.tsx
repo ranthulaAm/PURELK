@@ -329,7 +329,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
               {visible.map((x) => (
                 <article key={x.id}>
                   {x.imageKey ? (
-                    <img className="item-thumb" src={x.imageKey} alt="" />
+                    <img className="item-thumb" src={x.imageKey} alt="" referrerPolicy="no-referrer" />
                   ) : (
                     <div className="item-thumb placeholder">{x.meta || '+'}</div>
                   )}
@@ -355,7 +355,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onNavigate }) =>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   <label className="upload-zone">
                     {draft.imageKey ? (
-                      <img src={draft.imageKey} alt="Preview" />
+                      <img src={draft.imageKey} alt="Preview" referrerPolicy="no-referrer" />
                     ) : (
                       <span>{uploading ? 'Uploading…' : '＋ Upload image'}</span>
                     )}
