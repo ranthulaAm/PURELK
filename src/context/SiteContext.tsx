@@ -20,6 +20,7 @@ import { starterItems, defaultSettings, starterAdmins } from '../data/starterDat
 interface SiteContextType {
   items: SiteItem[];
   settings: SiteSettings;
+  loading: boolean;
   submissions: ContactSubmission[];
   admins: AdminUser[];
   currentAdmin: { email: string; displayName: string; role: string } | null;
@@ -53,8 +54,43 @@ function slugify(v: string) {
 }
 
 export const SiteProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [items, setItems] = useState<SiteItem[]>(starterItems);
-  const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
+  const [hasCache, setHasCache] = useState<boolean>(() => {
+    try {
+      return !!localStorage.getItem('purelk_items');
+    } catch {
+      return false;
+    }
+  });
+
+  const [itemsLoaded, setItemsLoaded] = useState(false);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
+
+  const loading = !hasCache && (!itemsLoaded || !settingsLoaded);
+
+  const [items, setItems] = useState<SiteItem[]>(() => {
+    try {
+      const cached = localStorage.getItem('purelk_items');
+      if (cached) {
+        return JSON.parse(cached);
+      }
+    } catch (e) {
+      console.warn('Failed to parse cached items', e);
+    }
+    return starterItems;
+  });
+
+  const [settings, setSettings] = useState<SiteSettings>(() => {
+    try {
+      const cached = localStorage.getItem('purelk_settings');
+      if (cached) {
+        return JSON.parse(cached);
+      }
+    } catch (e) {
+      console.warn('Failed to parse cached settings', e);
+    }
+    return defaultSettings;
+  });
+
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
   const [admins, setAdmins] = useState<AdminUser[]>(starterAdmins);
   const [pageViews, setPageViews] = useState<{ path: string; count: number }[]>([]);
@@ -122,6 +158,12 @@ export const SiteProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       snapshot.forEach((d) => newItems.push(d.data() as SiteItem));
       newItems.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
       setItems(newItems);
+      setItemsLoaded(true);
+      try {
+        localStorage.setItem('purelk_items', JSON.stringify(newItems));
+      } catch (e) {
+        console.warn('Failed to cache items', e);
+      }
     });
 
     const unsubSettings = onSnapshot(collection(db, 'site_settings'), (snapshot) => {
@@ -129,13 +171,31 @@ export const SiteProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       snapshot.forEach((d) => {
         newSettings[d.id] = d.data().value;
       });
+      setSettingsLoaded(true);
       if (Object.keys(newSettings).length > 0) {
-        setSettings((prev) => ({ ...defaultSettings, ...prev, ...newSettings }));
+        const mergedSettings = { ...defaultSettings, ...prevSettingsRef(), ...newSettings };
+        setSettings(mergedSettings);
+        try {
+          localStorage.setItem('purelk_settings', JSON.stringify(mergedSettings));
+        } catch (e) {
+          console.warn('Failed to cache settings', e);
+        }
       }
     });
 
     return () => { unsubItems(); unsubSettings(); };
   }, []);
+
+  // Helper helper to get updated settings cleanly
+  const prevSettingsRef = () => {
+    try {
+      const cached = localStorage.getItem('purelk_settings');
+      if (cached) {
+        return JSON.parse(cached);
+      }
+    } catch {}
+    return {};
+  };
 
   // Listeners for protected data (Admins only)
   useEffect(() => {
@@ -343,6 +403,7 @@ export const SiteProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       value={{
         items,
         settings,
+        loading,
         submissions,
         admins,
         currentAdmin,
